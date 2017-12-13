@@ -12,7 +12,7 @@ namespace PLProject_Pastor
 {
     class Interpreter
     {
-        string[] keywords = { "read", "write", "len", "sum", "if" };
+        string[] keywords = { "darllenwch", "ysgrifennu", "hyd", "svm", "os","arall" };// read,write,length,sum,if,else
         string[] datatypes = { "#", "@", "$", "~" };
         public Interpreter() { }
 
