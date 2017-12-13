@@ -208,5 +208,12 @@ namespace PLProject_Pastor
             }
         }
 
+        void Ternary(string code)
+        {
+            string varName, condition, ;
+            string[] tern = code.Split(new char[] { ':' }, 2);
+            tern.
+        }
+
     }
 }
