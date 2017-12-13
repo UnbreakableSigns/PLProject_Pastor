@@ -50,14 +50,37 @@ namespace PLProject_Pastor
             {
                 //token[0]: token[1]
                 List<string> tokens = new List<string>();
-                tokens.AddRange(statements.ElementAt(i).Split(':'));
+                tokens.AddRange(statements.ElementAt(i).Split(new char[] { ':' }, 2));
                 tokens[0] = tokens[0].Trim();
                 tokens[1] = tokens[1].Trim();
 
                 //----------------------------------------------------NUMBER
                 if (tokens[0].Trim().StartsWith(datatypes[0]))
                 {
-                    numberType.Add(tokens[0], int.Parse(tokens[1]));
+                        if (tokens[1].Contains(keywords[2]))
+                        {
+                            tokens[1] = tokens[1].Replace("{", "");
+                            tokens[1] = tokens[1].Replace("}", "");
+                            string[] get = tokens[1].Split(':');
+                            if (listType.ContainsKey(get[1].Trim()))
+                                numberType.Add(tokens[0], listType[get[1].Trim()].Count);
+                        }
+                        //----------------------------------------------------SUM
+                        else if (tokens[1].Contains(keywords[3]))
+                        {
+                            tokens[1] = tokens[1].Replace("{", "");
+                            tokens[1] = tokens[1].Replace("}", "");
+                            string[] get = tokens[1].Split(':');
+                            if (listType.ContainsKey(get[1].Trim()))
+                            {
+                                double sum = 0;
+                                foreach (double d in listType[get[1].Trim()])
+                                    sum += d;
+                                numberType.Add(tokens[0], sum);
+                            }
+                        }
+                        else
+                            numberType.Add(tokens[0], int.Parse(tokens[1]));
                 }
                 //----------------------------------------------------LIST
                 else if (tokens[0].Trim().StartsWith(datatypes[1]))
@@ -94,7 +117,25 @@ namespace PLProject_Pastor
                 {
                     Write(tokens);
                 }
-
+                //----------------------------------------------------LENGTH
+                else if (tokens[0].Contains(keywords[2]))
+                {
+                        if (listType.ContainsKey(tokens[1]))
+                        {
+                            ConsoleOutput.WriteConsole(listType[tokens[1]].Count+"");
+                        }
+                }
+                //----------------------------------------------------SUM
+                else if (tokens[0].Contains(keywords[3]))
+                {
+                        if (listType.ContainsKey(tokens[1]))
+                        {
+                            double sum = 0;
+                            foreach (double d in listType[tokens[1]])
+                                sum += d;
+                            ConsoleOutput.WriteConsole(sum + "");
+                        }
+                }
             }
 
             //Display Console
