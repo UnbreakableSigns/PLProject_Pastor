@@ -26,7 +26,7 @@ namespace PLProject_Pastor
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
             string keywords = @"\b(write|read|sum|len|true|false)\b";//hello
-            string variabs = @"(\$.+?\s|#.+?\s|@.+?\s|~.+?\s)";
+            string variabs = @"(\$.+?\s|#.+?\s|@.+?\s|~.+?\s)";     
             string comments = @"(\--\--.+?$|\--*.+?\--)";
             string str = @"(''|'.+?')";
             
