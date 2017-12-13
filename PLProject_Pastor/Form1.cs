@@ -23,10 +23,14 @@ namespace PLProject_Pastor
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Interpreter inter = new Interpreter();
-            inter.read(richTextBox1.Text);
-
-            string[] splitArray = Regex.Split(richTextBox1.Text, @"(?:,\s+)");
+            //try{
+                Interpreter inter = new Interpreter();
+                inter.read(richTextBox1.Text);
+            //}
+            //catch (Exception ex) {
+                //MessageBox.Show("There seems to be an error in your code.");
+            ///}
+            /*string[] splitArray = Regex.Split(richTextBox1.Text, @"(?:,\s+)");
             List<string> statements = new List<string>();
 
             for (int i = 0; i < splitArray.Length; i++)
@@ -51,7 +55,7 @@ namespace PLProject_Pastor
 
                 richTextBox1.Text += ss;
                 richTextBox1.Text += "\n";
-            }
+            }*/
         }
 
 
