@@ -53,28 +53,28 @@ namespace PLProject_Pastor
             {
                 richTextBox1.SelectionStart = m.Index;
                 richTextBox1.SelectionLength = m.Length;
-                richTextBox1.SelectionColor = Color.Blue;
+                richTextBox1.SelectionColor = Color.Orange;
             }
 
             foreach (Match m in commsmatch)
             {
                 richTextBox1.SelectionStart = m.Index;
                 richTextBox1.SelectionLength = m.Length;
-                richTextBox1.SelectionColor = Color.Green;
+                richTextBox1.SelectionColor = Color.IndianRed;
             }
             foreach (Match m in strmatch)
             {
 
                 richTextBox1.SelectionStart = m.Index;
                 richTextBox1.SelectionLength = m.Length;
-                richTextBox1.SelectionColor = Color.Red;
+                richTextBox1.SelectionColor = Color.Yellow;
             }
             foreach (Match m in varmatch)
             {
 
                 richTextBox1.SelectionStart = m.Index;
                 richTextBox1.SelectionLength = m.Length;
-                richTextBox1.SelectionColor = Color.SeaGreen;
+                richTextBox1.SelectionColor = Color.LightSeaGreen;
             }
 
             richTextBox1.SelectionStart = originalIndex;
