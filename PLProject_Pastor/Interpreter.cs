@@ -45,6 +45,7 @@ namespace PLProject_Pastor
                 statements.AddRange(splitArray[i].Split('\n', '\t'));
             }
 
+            if (statements.Count!=0)
             for (int i = 0; i < statements.Count; i++)
             {
                 //token[0]: token[1]
@@ -57,27 +58,31 @@ namespace PLProject_Pastor
                 if (tokens[0].Trim().StartsWith(datatypes[0]))
                 {
                     numberType.Add(tokens[0], int.Parse(tokens[1]));
-                    MessageBox.Show("[" + tokens[0] + "] added to inttype [" + tokens[1] + "]");
                 }
                 //----------------------------------------------------LIST
                 else if (tokens[0].Trim().StartsWith(datatypes[1]))
                 {
                     List<double> listOfDouble = new List<double>();
-                    //TODO:
-                    //split tokens[1] into list of numbers
-                    listType.Add(tokens[0], listOfDouble);
+
+                    tokens[1] = tokens[1].Substring(1, tokens[1].Length - 2);
+                    string[] nums = tokens[1].Split(new char[0]);
+
+                    foreach (string n in nums)
+                        listOfDouble.Add(double.Parse(n));
+
+
+                    listType.Add(tokens[0].Trim(), listOfDouble);
+                    MessageBox.Show("[" + tokens[0] + "] added to list [" + tokens[1] + "]");
                 }
                 //----------------------------------------------------STRING
                 else if (tokens[0].Trim().StartsWith(datatypes[2]))
                 {
                     stringType.Add(tokens[0], tokens[1]);
-                    MessageBox.Show("[" +tokens[0] + "] added to string [" + tokens[1] + "]");
                 }
                 //----------------------------------------------------BOOL
                 else if (tokens[0].Trim().StartsWith(datatypes[3]))
                 {
                     boolType.Add(tokens[0], bool.Parse(tokens[1]));
-                    MessageBox.Show("[" + tokens[0] + "] added to bool [" + tokens[1] + "]");
                 }
                 //----------------------------------------------------READ
                 else if (tokens[0].Contains(keywords[0]))
@@ -149,7 +154,15 @@ namespace PLProject_Pastor
             }
             else if (boolType.ContainsKey(tokens[1]))
             {
-                output = numberType[tokens[1]] + "\n";
+                output = boolType[tokens[1]] + "\n";
+                ConsoleOutput.WriteConsole(output);
+            }
+            else if (listType.ContainsKey(tokens[1]))
+            {
+                output = "[";
+                foreach(double t in listType[tokens[1]])
+                    output += t + " ";
+                output = output.Trim() + "]\n";
                 ConsoleOutput.WriteConsole(output);
             }
         }
