@@ -19,6 +19,8 @@ namespace PLProject_Pastor
         Regex arithmetics = new Regex(@"([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)");
         Dictionary<string, string> stringType = new Dictionary<string, string>();
         Dictionary<string, double> numberType = new Dictionary<string, double>();
+        Dictionary<string, List<double>> listType = new Dictionary<string, List<double>>();
+        Dictionary<string, bool> boolType = new Dictionary<string, bool>();
 
         string output;
         void read(string code) { 
@@ -40,9 +42,31 @@ namespace PLProject_Pastor
                 //token: token
                 List<string> tokens = new List<string>();
                 tokens.AddRange(statements.ElementAt(i).Split(':'));
-            }
 
-                if (consoleIsOpen == true)
+                if (tokens[0].Trim().StartsWith(datatypes[0]))//number
+                {
+                    numberType.Add(tokens[0], int.Parse(tokens[1]));
+                }
+                else if (tokens[0].Trim().StartsWith(datatypes[1]))//list
+                {
+                    List<double> listOfDouble = new List<double>();
+                    //TODO:
+                    //split tokens[1] into list of numbers
+                    listType.Add(tokens[0], listOfDouble);
+                }
+                else if (tokens[0].Trim().StartsWith(datatypes[2]))//string
+                {
+                    stringType.Add(tokens[0], tokens[1]);
+                }
+                else if (tokens[0].Trim().StartsWith(datatypes[3]))//bool
+                {
+                    boolType.Add(tokens[0], bool.Parse(tokens[1]));
+                }
+            }
+            
+            
+
+            if (consoleIsOpen == true)
             {
                 ConsoleOutput.WriteConsole("\n\n--------------------------------------------------------------------------------\nPress any key to continue. . .");
                 ConsoleOutput.ReadLineConsole();
