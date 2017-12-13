@@ -38,6 +38,14 @@ namespace PLProject_Pastor
                 listType.Clear();
 
                 output = "";
+
+                if (code.StartsWith("{") && code.EndsWith("}"))
+                {
+                    code = code.TrimStart('{').TrimEnd('}').Trim();
+                }
+                else
+                    throw new Exception();
+
                 stringType = new Dictionary<string, string>();
                 numberType = new Dictionary<string, double>();
                 string[] splitArray = Regex.Split(code, @"(?:,\s+|\^{\*\})");
@@ -142,7 +150,6 @@ namespace PLProject_Pastor
 
 
                         listType.Add(tokens[0].Trim(), listOfDouble);
-                        MessageBox.Show("[" + tokens[0] + "] added to list [" + tokens[1] + "]");
                     }
                     //----------------------------------------------------STRING
                     else if (tokens[0].Trim().StartsWith(datatypes[2]))
@@ -300,7 +307,7 @@ namespace PLProject_Pastor
                 c2 = tern2[1].Trim().Split(';')[1];
             }
             else throw new Exception();
-
+            
             if (Condition(condition))
                 return double.Parse(c1);
             else

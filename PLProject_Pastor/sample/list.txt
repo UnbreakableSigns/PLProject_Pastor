@@ -1,3 +1,5 @@
-@var : [1 2 3 4] -- assign list --
-#var: { hyd : @var } --assign the sum of the list to var --
-ysgrifennu : #var -- display sum --
+{
+@var : [1 2 3 4],
+#var: { svm : @var },
+ysgrifennu : #var 
+}
