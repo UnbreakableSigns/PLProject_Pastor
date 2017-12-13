@@ -90,9 +90,21 @@ namespace PLProject_Pastor
                 //Display Console
                 if (consoleIsOpen == true)
                 {
+                    Console.WriteLine("STRING");
                     foreach (KeyValuePair<string, string> kvp in stringType)
                     {
-                        //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                    }
+
+                    Console.WriteLine("BOOL");
+                    foreach (KeyValuePair<string, bool> kvp in boolType)
+                    {
+                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                    }
+
+                    Console.WriteLine("NUMBER");
+                    foreach (KeyValuePair<string, double> kvp in numberType)
+                    {
                         Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
                     }
 
