@@ -14,6 +14,7 @@ namespace PLProject_Pastor
     {
         string[] keywords = { "darllenwch", "ysgrifennu", "hyd", "svm", "os","arall" };// read,write,length,sum,if,else
         string[] datatypes = { "#", "@", "$", "~" };
+        string[] ariths = { "+", "-", "*","/","%" };
         public Interpreter() { }
 
         Regex arithmetics = new Regex(@"([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)");
@@ -21,6 +22,7 @@ namespace PLProject_Pastor
         Dictionary<string, double> numberType = new Dictionary<string, double>();
         Dictionary<string, List<double>> listType = new Dictionary<string, List<double>>();
         Dictionary<string, bool> boolType = new Dictionary<string, bool>();
+        Dictionary<string, double> arithTypes= new Dictionary<string,double>();
 
         string output;
         bool consoleIsOpen = false;
@@ -28,10 +30,6 @@ namespace PLProject_Pastor
         public void read(string code)
         {
             consoleIsOpen = false;
-            stringType.Clear();
-            numberType.Clear();
-            boolType.Clear();
-            listType.Clear();
 
             output = "";
             stringType = new Dictionary<string, string>();
@@ -81,7 +79,7 @@ namespace PLProject_Pastor
                 }
                 //----------------------------------------------------READ
                 else if (tokens[0].Contains(keywords[0]))
-                {   
+                {
                     Read(tokens);
                 }
                 //----------------------------------------------------WRITE
@@ -89,18 +87,76 @@ namespace PLProject_Pastor
                 {
                     Write(tokens);
                 }
+                //--------------------------------------------------ADD
+                else if (tokens[0].Contains(ariths[0]))
+                {
+                    string []toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) + double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
 
+                }
+                //--------------------------------------------------SUBTRACT
+                else if (tokens[0].Contains(ariths[1]))
+                {
+                    string[] toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) - double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+              
+                }
+                //--------------------------------------------------MULTIPLY
+                else if (tokens[0].Contains(ariths[2]))
+                {
+                    string[] toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) * double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+
+                }
+                //-------------------------------------------------- DIVIDE
+                else if (tokens[0].Contains(ariths[3]))
+                {
+                    string[] toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) / double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+
+                }
+                //--------------------------------------------------Remainder
+                else if (tokens[0].Contains(ariths[4]))
+                {
+                    string[] toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) % double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+
+                }
+
+
+                //Display Console
+                if (consoleIsOpen == true)
+                {
+                    Console.WriteLine("STRING");
+                    foreach (KeyValuePair<string, string> kvp in stringType)
+                    {
+                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                    }
+
+                    Console.WriteLine("BOOL");
+                    foreach (KeyValuePair<string, bool> kvp in boolType)
+                    {
+                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                    }
+
+                    Console.WriteLine("NUMBER");
+                    foreach (KeyValuePair<string, double> kvp in numberType)
+                    {
+                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                    }
+
+                    ConsoleOutput.WriteConsole("\n\n--------------------------------------------------------------------------------\nPress any key to continue. . .");
+                    ConsoleOutput.ReadLineConsole();
+                    ConsoleOutput.CloseConsole();
+                    consoleIsOpen = false;
+                }
             }
 
-            //Display Console
-            if (consoleIsOpen == true)
-            {
-
-                ConsoleOutput.WriteConsole("\n\n--------------------------------------------------------------------------------\nPress any key to continue. . .");
-                ConsoleOutput.ReadLineConsole();
-                ConsoleOutput.CloseConsole();
-                consoleIsOpen = false;
-            }
         }
 
         void Read(List<string> tokens) {
@@ -110,14 +166,14 @@ namespace PLProject_Pastor
                 consoleIsOpen = true;
             }
             string value = ConsoleOutput.ReadLineConsole();
-            if (stringType.ContainsKey(tokens[1]))
-                stringType.Remove(tokens[1]);
-            
-                stringType.Add(tokens[1], value);
+            if (stringType.ContainsKey(tokens[0]))
+            {
+                stringType.Remove(tokens[0]);
+                stringType.Add(tokens[0], value);
+            }
         }
 
         void Write(List<string> tokens) {
-            
             if (consoleIsOpen == false)
             {
                 ConsoleOutput.OpenConsole();
@@ -128,9 +184,9 @@ namespace PLProject_Pastor
                 output = tokens[1].Substring(1, tokens[1].Length - 2) + "\n";
                 ConsoleOutput.WriteConsole(output);
             }
-            else if (stringType.ContainsKey(tokens[1].Trim()))
+            else if (stringType.ContainsKey(tokens[0].Trim()))
             {
-                
+                MessageBox.Show("pasok");
                 if (stringType[tokens[1]].Trim().ToString().StartsWith("\'"))
                 {
                     output = stringType[tokens[1]].Trim().ToString().Substring(1, stringType[tokens[1]].Trim().ToString().Length - 2) + "\n";
@@ -138,20 +194,16 @@ namespace PLProject_Pastor
                 }
                 else
                 {
-                    output = stringType[tokens[1]] + "\n";
+                    output = stringType[tokens.ElementAt(1)] + "\n";
                     ConsoleOutput.WriteConsole(output);
                 }
             }
-            else if (numberType.ContainsKey(tokens[1]))
-            {
-                output = numberType[tokens[1]] + "\n";
-                ConsoleOutput.WriteConsole(output);
-            }
-            else if (boolType.ContainsKey(tokens[1]))
-            {
-                output = numberType[tokens[1]] + "\n";
-                ConsoleOutput.WriteConsole(output);
-            }
+            /*                    else if (numberType.ContainsKey(tokens.ElementAt(i + 1)))
+                                {
+                                    output = numberType[tokens.ElementAt(i + 1)] + "\n";
+                                    ConsoleOutput.WriteConsole(output);
+                                }
+                                */
         }
 
     }
