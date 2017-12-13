@@ -29,35 +29,38 @@ namespace PLProject_Pastor
 
         public void read(string code)
         {
-            consoleIsOpen = false;
-            stringType.Clear();
-            numberType.Clear();
-            boolType.Clear();
-            listType.Clear();
-
-            output = "";
-            stringType = new Dictionary<string, string>();
-            numberType = new Dictionary<string, double>();
-            string[] splitArray = Regex.Split(code, @"(?:,\s+|\^{\*\})");
-            List<string> statements = new List<string>();
-
-
-            for (int i = 0; i < splitArray.Length; i++)
+            try
             {
-                statements.AddRange(splitArray[i].Split('\n', '\t'));
-            }
+                consoleIsOpen = false;
+                stringType.Clear();
+                numberType.Clear();
+                boolType.Clear();
+                listType.Clear();
 
-            for (int i = 0; i < statements.Count; i++)
-            {
-                //token[0]: token[1]
-                List<string> tokens = new List<string>();
-                tokens.AddRange(statements.ElementAt(i).Split(new char[] { ':' }, 2));
-                tokens[0] = tokens[0].Trim();
-                tokens[1] = tokens[1].Trim();
+                output = "";
+                stringType = new Dictionary<string, string>();
+                numberType = new Dictionary<string, double>();
+                string[] splitArray = Regex.Split(code, @"(?:,\s+|\^{\*\})");
+                List<string> statements = new List<string>();
 
-                //----------------------------------------------------NUMBER
-                if (tokens[0].Trim().StartsWith(datatypes[0]))
+
+                for (int i = 0; i < splitArray.Length; i++)
                 {
+                    statements.AddRange(splitArray[i].Split('\n', '\t'));
+                }
+
+                for (int i = 0; i < statements.Count; i++)
+                {
+                    //token[0]: token[1]
+                    List<string> tokens = new List<string>();
+                    tokens.AddRange(statements.ElementAt(i).Split(new char[] { ':' }, 2));
+                    tokens[0] = tokens[0].Trim();
+                    tokens[1] = tokens[1].Trim();
+
+
+                    //----------------------------------------------------NUMBER
+                    if (tokens[0].Trim().StartsWith(datatypes[0]))
+                    {
                         if (tokens[1].Contains(keywords[2]))
                         {
                             tokens[1] = tokens[1].Replace("{", "");
@@ -81,8 +84,8 @@ namespace PLProject_Pastor
                         }
                         else if (tokens[1].Contains(keywords[4]))
                         {//////////////////////////////
-                            MessageBox.Show("ch : "+ tokens[1]);
-                            numberType.Add(tokens[0], Ternary(tokens[1],0));
+                            MessageBox.Show("ch : " + tokens[1]);
+                            numberType.Add(tokens[0], Ternary(tokens[1], 0));
                         }
                         else if (tokens[1].Contains(ariths[0]))
                         {
@@ -125,53 +128,53 @@ namespace PLProject_Pastor
                         }
                         else
                             numberType.Add(tokens[0], int.Parse(tokens[1]));
-                }
-                //----------------------------------------------------LIST
-                else if (tokens[0].Trim().StartsWith(datatypes[1]))
-                {
-                    List<double> listOfDouble = new List<double>();
+                    }
+                    //----------------------------------------------------LIST
+                    else if (tokens[0].Trim().StartsWith(datatypes[1]))
+                    {
+                        List<double> listOfDouble = new List<double>();
 
-                    tokens[1] = tokens[1].Substring(1, tokens[1].Length - 2);
-                    string[] nums = tokens[1].Split(new char[0]);
+                        tokens[1] = tokens[1].Substring(1, tokens[1].Length - 2);
+                        string[] nums = tokens[1].Split(new char[0]);
 
-                    foreach (string n in nums)
-                        listOfDouble.Add(double.Parse(n));
+                        foreach (string n in nums)
+                            listOfDouble.Add(double.Parse(n));
 
 
-                    listType.Add(tokens[0].Trim(), listOfDouble);
-                    MessageBox.Show("[" + tokens[0] + "] added to list [" + tokens[1] + "]");
-                }
-                //----------------------------------------------------STRING
-                else if (tokens[0].Trim().StartsWith(datatypes[2]))
-                {
-                    stringType.Add(tokens[0], tokens[1]);
-                }
-                //----------------------------------------------------BOOL
-                else if (tokens[0].Trim().StartsWith(datatypes[3]))
-                {
-                    boolType.Add(tokens[0], getWelshBoolean(tokens[1]));
-                }
-                //----------------------------------------------------READ
-                else if (tokens[0].Contains(keywords[0]))
-                {   
-                    Read(tokens);
-                }
-                //----------------------------------------------------WRITE
-                else if (tokens[0].Contains(keywords[1]))
-                {
-                    Write(tokens);
-                }
-                //----------------------------------------------------LENGTH
-                else if (tokens[0].Contains(keywords[2]))
-                {
+                        listType.Add(tokens[0].Trim(), listOfDouble);
+                        MessageBox.Show("[" + tokens[0] + "] added to list [" + tokens[1] + "]");
+                    }
+                    //----------------------------------------------------STRING
+                    else if (tokens[0].Trim().StartsWith(datatypes[2]))
+                    {
+                        stringType.Add(tokens[0], tokens[1]);
+                    }
+                    //----------------------------------------------------BOOL
+                    else if (tokens[0].Trim().StartsWith(datatypes[3]))
+                    {
+                        boolType.Add(tokens[0], getWelshBoolean(tokens[1]));
+                    }
+                    //----------------------------------------------------READ
+                    else if (tokens[0].Contains(keywords[0]))
+                    {
+                        Read(tokens);
+                    }
+                    //----------------------------------------------------WRITE
+                    else if (tokens[0].Contains(keywords[1]))
+                    {
+                        Write(tokens);
+                    }
+                    //----------------------------------------------------LENGTH
+                    else if (tokens[0].Contains(keywords[2]))
+                    {
                         if (listType.ContainsKey(tokens[1]))
                         {
-                            ConsoleOutput.WriteConsole(listType[tokens[1]].Count+"");
+                            ConsoleOutput.WriteConsole(listType[tokens[1]].Count + "");
                         }
-                }
-                //----------------------------------------------------SUM
-                else if (tokens[0].Contains(keywords[3]))
-                {
+                    }
+                    //----------------------------------------------------SUM
+                    else if (tokens[0].Contains(keywords[3]))
+                    {
                         if (listType.ContainsKey(tokens[1]))
                         {
                             double sum = 0;
@@ -179,18 +182,22 @@ namespace PLProject_Pastor
                                 sum += d;
                             ConsoleOutput.WriteConsole(sum + "");
                         }
+                    }
+
                 }
 
+                //Display Console
+                if (consoleIsOpen == true)
+                {
+
+                    ConsoleOutput.WriteConsole("\n\n---------------------------------------------------------------\nPress any key to continue. . .");
+                    ConsoleOutput.ReadLineConsole();
+                    ConsoleOutput.CloseConsole();
+                    consoleIsOpen = false;
+                }
             }
-
-            //Display Console
-            if (consoleIsOpen == true)
-            {
-
-                ConsoleOutput.WriteConsole("\n\n---------------------------------------------------------------\nPress any key to continue. . .");
-                ConsoleOutput.ReadLineConsole();
-                ConsoleOutput.CloseConsole();
-                consoleIsOpen = false;
+            catch (Exception ex) {
+                
             }
         }
 
