@@ -250,13 +250,51 @@ namespace PLProject_Pastor
                 output = output.Trim() + "]\n";
                 ConsoleOutput.WriteConsole(output);
             }
+        }   
+
+        public object Ternary(string code, string dataType)
+        {
+            //#var1 : {if:1>2 , 1;2}
+            string varName, condition, c1, c2;
+            string[] tern = code.Split(new char[] { ':' }, 2);
+            varName = tern[0];
+            tern[1] = tern[1].Replace("}", "");
+            tern[1] = tern[1].Replace("{", "");
+
+            string[] tern2 = tern[1].Split(new char[] { ':' }, 2);
+            if ((tern2[0].Split(':')[0]).Contains(keywords[4]))
+            {
+                condition = tern2[0].Split(':')[1];
+                c1 = tern2[1].Split(';')[0];
+                c2 = tern2[1].Split(';')[1];
+            }
+            else throw new Exception();
+
+            if (dataType == "string") {
+                if (Condition(condition))
+                    return c1;
+                else
+                    return c2;
+            }
+            else if (dataType == "number") {
+                if (Condition(condition))
+                    return double.Parse(c1);
+                else
+                    return double.Parse(c2);
+            }
+
+            return null;
         }
 
-        void Ternary(string code)
-        {
-            string varName, condition, ;
-            string[] tern = code.Split(new char[] { ':' }, 2);
-            tern.
+        bool Condition(string parse) {
+            if (parse.Contains("<"))
+                return double.Parse(parse.Split('<')[0]) < double.Parse(parse.Split('<')[1]);
+            if (parse.Contains(">"))
+                return double.Parse(parse.Split('>')[0]) > double.Parse(parse.Split('>')[1]);
+            if (parse.Contains("="))
+                return double.Parse(parse.Split('=')[0]) == double.Parse(parse.Split('=')[1]);
+
+            return false;
         }
 
     }
