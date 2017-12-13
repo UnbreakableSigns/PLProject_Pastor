@@ -25,11 +25,15 @@ namespace PLProject_Pastor
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            string keywords = @"\b(write|read|sum|len|true|false)\b";
+            string keywords = @"\b(write|read|sum|len|true|false)\b";//hello
+            string variabs = @"(\$.+?\s|#.+?\s|@.+?\s|~.+?\s)";
             string comments = @"(\--\--.+?$|\--*.+?\--)";
-
+            string str = @"(''|'.+?')";
+            
             MatchCollection keymatch = Regex.Matches(richTextBox1.Text, keywords);
             MatchCollection commsmatch = Regex.Matches(richTextBox1.Text, comments);
+            MatchCollection strmatch = Regex.Matches(richTextBox1.Text, str);
+            MatchCollection varmatch = Regex.Matches(richTextBox1.Text, variabs);
 
             int originalIndex = richTextBox1.SelectionStart;
             int originalLength = richTextBox1.SelectionLength;
@@ -52,6 +56,20 @@ namespace PLProject_Pastor
                 richTextBox1.SelectionStart = m.Index;
                 richTextBox1.SelectionLength = m.Length;
                 richTextBox1.SelectionColor = Color.Green;
+            }
+            foreach (Match m in strmatch)
+            {
+
+                richTextBox1.SelectionStart = m.Index;
+                richTextBox1.SelectionLength = m.Length;
+                richTextBox1.SelectionColor = Color.Red;
+            }
+            foreach (Match m in varmatch)
+            {
+
+                richTextBox1.SelectionStart = m.Index;
+                richTextBox1.SelectionLength = m.Length;
+                richTextBox1.SelectionColor = Color.SeaGreen;
             }
 
             richTextBox1.SelectionStart = originalIndex;
