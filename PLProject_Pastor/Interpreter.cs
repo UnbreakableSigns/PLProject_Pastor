@@ -53,6 +53,7 @@ namespace PLProject_Pastor
                 if (tokens[0].Trim().StartsWith(datatypes[0]))
                 {
                     numberType.Add(tokens[0], int.Parse(tokens[1]));
+                    MessageBox.Show("[" + tokens[0] + "] added to inttype [" + tokens[1] + "]");
                 }
                 //----------------------------------------------------LIST
                 else if (tokens[0].Trim().StartsWith(datatypes[1]))
@@ -72,6 +73,7 @@ namespace PLProject_Pastor
                 else if (tokens[0].Trim().StartsWith(datatypes[3]))
                 {
                     boolType.Add(tokens[0], bool.Parse(tokens[1]));
+                    MessageBox.Show("[" + tokens[0] + "] added to bool [" + tokens[1] + "]");
                 }
                 //----------------------------------------------------READ
                 else if (tokens[0].Contains(keywords[0]))
@@ -88,6 +90,12 @@ namespace PLProject_Pastor
                 //Display Console
                 if (consoleIsOpen == true)
                 {
+                    foreach (KeyValuePair<string, string> kvp in stringType)
+                    {
+                        //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                    }
+
                     ConsoleOutput.WriteConsole("\n\n--------------------------------------------------------------------------------\nPress any key to continue. . .");
                     ConsoleOutput.ReadLineConsole();
                     ConsoleOutput.CloseConsole();
