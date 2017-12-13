@@ -5,7 +5,8 @@ using System.Text;
 
 namespace PLProject_Pastor
 {
-    class json
+    class IDE
     {
+        
     }
 }
