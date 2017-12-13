@@ -62,7 +62,7 @@ namespace PLProject_Pastor
         //set color of certain keywords and tokens in languages
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            string keywords = @"\b(darllenwch|ysgrifennu|svm|hyd|wir|ffug)\b";//(write|read|sum|len|true|false)
+            string keywords = @"\b(darllenwch|ysgrifennu|svm|hyd|wir|ffug|os)\b";//(write|read|sum|len|true|false|if)
             string variabs = @"(\$.+?\s|#.+?\s|@.+?\s|~.+?\s)";     
             string comments = @"(\--\--.+?$|\--*.+?\--)";
             string str = @"(''|'.+?')";

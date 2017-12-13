@@ -12,7 +12,7 @@ namespace PLProject_Pastor
 {
     class Interpreter
     {
-        string[] keywords = { "darllenwch", "ysgrifennu", "hyd", "svm", "os","arall" };// read,write,length,sum,if,else
+        string[] keywords = { "darllenwch", "ysgrifennu", "hyd", "svm", "os"};// read,write,length,sum,if
         string[] datatypes = { "#", "@", "$", "~" };
         string[] ariths = { "+", "-", "*", "/", "%" };
         public Interpreter() { }
@@ -38,7 +38,7 @@ namespace PLProject_Pastor
             output = "";
             stringType = new Dictionary<string, string>();
             numberType = new Dictionary<string, double>();
-            string[] splitArray = Regex.Split(code, @"(?:,\s+)");
+            string[] splitArray = Regex.Split(code, @"(?:,\s+|{\*\})");
             List<string> statements = new List<string>();
 
 
@@ -67,7 +67,6 @@ namespace PLProject_Pastor
                             if (listType.ContainsKey(get[1].Trim()))
                                 numberType.Add(tokens[0], listType[get[1].Trim()].Count);
                         }
-                        //----------------------------------------------------SUM
                         else if (tokens[1].Contains(keywords[3]))
                         {
                             tokens[1] = tokens[1].Replace("{", "");
@@ -80,6 +79,50 @@ namespace PLProject_Pastor
                                     sum += d;
                                 numberType.Add(tokens[0], sum);
                             }
+                        }
+                        else if (tokens[1].Contains(keywords[4]))
+                        {//////////////////////////////
+                            MessageBox.Show("ch : "+ tokens[1]);
+                            numberType.Add(tokens[0], Ternary(tokens[1],0));
+                        }
+                        else if (tokens[1].Contains(ariths[0]))
+                        {
+                            string[] toks = tokens[1].Split(' ');
+                            double ans = double.Parse(toks[1]) + double.Parse(toks[2]);
+                            numberType.Add(tokens[0], ans);
+
+                        }
+                        //--------------------------------------------------SUBTRACT
+                        else if (tokens[1].Contains(ariths[1]))
+                        {
+                            string[] toks = tokens[1].Split(' ');
+                            double ans = double.Parse(toks[1]) - double.Parse(toks[2]);
+                            numberType.Add(tokens[0], ans);
+
+                        }
+                        //--------------------------------------------------MULTIPLY
+                        else if (tokens[1].Contains(ariths[2]))
+                        {
+                            string[] toks = tokens[1].Split(' ');
+                            double ans = double.Parse(toks[1]) * double.Parse(toks[2]);
+                            numberType.Add(tokens[0], ans);
+
+                        }
+                        //-------------------------------------------------- DIVIDE
+                        else if (tokens[1].Contains(ariths[3]))
+                        {
+                            string[] toks = tokens[1].Split(' ');
+                            double ans = double.Parse(toks[1]) / double.Parse(toks[2]);
+                            numberType.Add(tokens[0], ans);
+
+                        }
+                        //--------------------------------------------------Remainder
+                        else if (tokens[1].Contains(ariths[4]))
+                        {
+                            string[] toks = tokens[1].Split(' ');
+                            double ans = double.Parse(toks[1]) % double.Parse(toks[2]);
+                            numberType.Add(tokens[0], ans);
+
                         }
                         else
                             numberType.Add(tokens[0], int.Parse(tokens[1]));
@@ -107,7 +150,7 @@ namespace PLProject_Pastor
                 //----------------------------------------------------BOOL
                 else if (tokens[0].Trim().StartsWith(datatypes[3]))
                 {
-                    boolType.Add(tokens[0], bool.Parse(tokens[1]));
+                    boolType.Add(tokens[0], getWelshBoolean(tokens[1]));
                 }
                 //----------------------------------------------------READ
                 else if (tokens[0].Contains(keywords[0]))
@@ -137,47 +180,6 @@ namespace PLProject_Pastor
                                 sum += d;
                             ConsoleOutput.WriteConsole(sum + "");
                         }
-                }
-
-                //--------------------------------------------------ADD
-                else if (tokens[0].Contains(ariths[0]))
-                {
-                    string []toks = tokens[1].Split(' ');
-                    double ans = double.Parse(toks[0]) + double.Parse(toks[1]);
-                    arithTypes.Add(tokens[0], ans);
-
-                }
-                //--------------------------------------------------SUBTRACT
-                else if (tokens[0].Contains(ariths[1]))
-                {
-                    string[] toks = tokens[1].Split(' ');
-                    double ans = double.Parse(toks[0]) - double.Parse(toks[1]);
-                    arithTypes.Add(tokens[0], ans);
-              
-                }
-                //--------------------------------------------------MULTIPLY
-                else if (tokens[0].Contains(ariths[2]))
-                {
-                    string[] toks = tokens[1].Split(' ');
-                    double ans = double.Parse(toks[0]) * double.Parse(toks[1]);
-                    arithTypes.Add(tokens[0], ans);
-
-                }
-                //-------------------------------------------------- DIVIDE
-                else if (tokens[0].Contains(ariths[3]))
-                {
-                    string[] toks = tokens[1].Split(' ');
-                    double ans = double.Parse(toks[0]) / double.Parse(toks[1]);
-                    arithTypes.Add(tokens[0], ans);
-
-                }
-                //--------------------------------------------------Remainder
-                else if (tokens[0].Contains(ariths[4]))
-                {
-                    string[] toks = tokens[1].Split(' ');
-                    double ans = double.Parse(toks[0]) % double.Parse(toks[1]);
-                    arithTypes.Add(tokens[0], ans);
-
                 }
 
             }
@@ -240,6 +242,7 @@ namespace PLProject_Pastor
             else if (boolType.ContainsKey(tokens[1]))
             {
                 output = boolType[tokens[1]] + "\n";
+                //output = getWelshBoolean(boolType[tokens[1]]) + "\n";
                 ConsoleOutput.WriteConsole(output);
             }
             else if (listType.ContainsKey(tokens[1]))
@@ -252,16 +255,14 @@ namespace PLProject_Pastor
             }
         }   
 
-        public object Ternary(string code, string dataType)
+        public String Ternary(string code, string dataType)
         {
-            //#var1 : {if:1>2 , 1;2}
-            string varName, condition, c1, c2;
-            string[] tern = code.Split(new char[] { ':' }, 2);
-            varName = tern[0];
-            tern[1] = tern[1].Replace("}", "");
-            tern[1] = tern[1].Replace("{", "");
+            //{if:1>2 , 1;2}
+            string condition, c1, c2;
+            code= code.Replace("}", "");
+            code= code.Replace("{", "");
 
-            string[] tern2 = tern[1].Split(new char[] { ':' }, 2);
+            string[] tern2 = code.Split(new char[] { ':' }, 2);
             if ((tern2[0].Split(':')[0]).Contains(keywords[4]))
             {
                 condition = tern2[0].Split(':')[1];
@@ -270,20 +271,34 @@ namespace PLProject_Pastor
             }
             else throw new Exception();
 
-            if (dataType == "string") {
                 if (Condition(condition))
                     return c1;
                 else
                     return c2;
-            }
-            else if (dataType == "number") {
-                if (Condition(condition))
-                    return double.Parse(c1);
-                else
-                    return double.Parse(c2);
-            }
 
-            return null;
+        }
+
+        public double Ternary(string code, double dataType)
+        {
+            //#var1 : {if:1>2 , 1;2}
+            string condition, c1, c2;
+            code = code.Replace("}", "");
+            code = code.Replace("{", "");
+
+            string[] tern2 = code.Split(new char[] { ',' }, 2);
+            if ((tern2[0].Split(':')[0]).Contains(keywords[4]))
+            {
+                condition = tern2[0].Split(':')[1].Trim();
+                c1 = tern2[1].Trim().Split(';')[0];
+                MessageBox.Show(c1);
+                c2 = tern2[1].Trim().Split(';')[1];
+            }
+            else throw new Exception();
+
+            if (Condition(condition))
+                return double.Parse(c1);
+            else
+                return double.Parse(c2);
         }
 
         bool Condition(string parse) {
@@ -295,6 +310,14 @@ namespace PLProject_Pastor
                 return double.Parse(parse.Split('=')[0]) == double.Parse(parse.Split('=')[1]);
 
             return false;
+        }
+
+        string getWelshBoolean(bool x) {
+            return x ? "wir" : "ffug";
+        }
+
+        bool getWelshBoolean(string welsh) {
+            return welsh == "wir";
         }
 
     }
