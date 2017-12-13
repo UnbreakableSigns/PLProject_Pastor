@@ -11,7 +11,7 @@ namespace PLProject_Pastor
         string[] keywords = { "read", "write", "len", "sum" };
         public Interpreter() { }
 
-        void read() {
+        void read() {           
 
         }
 
