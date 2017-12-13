@@ -12,7 +12,8 @@ namespace PLProject_Pastor
 {
     class Interpreter
     {
-        string[] keywords = { "read", "write", "len", "sum" };
+        string[] keywords = { "read", "write", "len", "sum" ,"if"};
+        string[] datatypes = { "#", "@", "$", "~" };
         public Interpreter() { }
 
         Regex arithmetics = new Regex(@"([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)");
@@ -24,11 +25,30 @@ namespace PLProject_Pastor
             output = "";
             stringType = new Dictionary<string, string>();
             numberType = new Dictionary<string, double>();
-            string[] splitArray = Regex.Split(code, "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            List<string> tokens = new List<string>();
+            string[] splitArray = Regex.Split(code, @"(?:,\s+)");
+            List<string> statements = new List<string>();
 
             bool consoleIsOpen = false;
 
+            for (int i = 0; i < splitArray.Length; i++)
+            {
+                statements.AddRange(splitArray[i].Split('\n', '\t', '='));
+            }
+
+            for (int i = 0; i < statements.Count; i++)
+            {
+                //token: token
+                List<string> tokens = new List<string>();
+                tokens.AddRange(statements.ElementAt(i).Split(':'));
+            }
+
+                if (consoleIsOpen == true)
+            {
+                ConsoleOutput.WriteConsole("\n\n--------------------------------------------------------------------------------\nPress any key to continue. . .");
+                ConsoleOutput.ReadLineConsole();
+                ConsoleOutput.CloseConsole();
+                consoleIsOpen = false;
+            }
         }
 
         /* public int SkipThisScope()

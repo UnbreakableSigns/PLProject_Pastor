@@ -18,12 +18,40 @@ namespace PLProject_Pastor
         public Form1()
         {
             InitializeComponent();
-            
+                
         }
 
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new Interpreter();
+            string[] splitArray = Regex.Split(richTextBox1.Text, @"(?:,\s+)");
+            List<string> statements = new List<string>();
+
+            for (int i = 0; i < splitArray.Length; i++)
+            {
+                statements.AddRange(splitArray[i].Split('\n', '\t'));
+            }
+            statements.Remove("");
+
+            richTextBox1.Text = "";
+            for (int i = 0; i < statements.Count; i++)
+            {
+                //token: token
+                List<string> tokens = new List<string>();
+
+                tokens.AddRange(statements.ElementAt(i).Split(':'));
+                string ss = "";
+                foreach (string s in tokens)
+                {
+
+                    ss += "[" + s + "]\n";
+                }
+
+                richTextBox1.Text += ss;
+                richTextBox1.Text += "\n";
+            }
+            
+            
+
         }
 
 
