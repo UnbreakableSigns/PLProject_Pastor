@@ -14,6 +14,7 @@ namespace PLProject_Pastor
     {
         string[] keywords = { "darllenwch", "ysgrifennu", "hyd", "svm", "os","arall" };// read,write,length,sum,if,else
         string[] datatypes = { "#", "@", "$", "~" };
+        string[] ariths = { "+", "-", "*", "/", "%" };
         public Interpreter() { }
 
         Regex arithmetics = new Regex(@"([-+]?[0-9]*\.?[0-9]+[\/\+\-\*])+([-+]?[0-9]*\.?[0-9]+)");
@@ -21,6 +22,7 @@ namespace PLProject_Pastor
         Dictionary<string, double> numberType = new Dictionary<string, double>();
         Dictionary<string, List<double>> listType = new Dictionary<string, List<double>>();
         Dictionary<string, bool> boolType = new Dictionary<string, bool>();
+        Dictionary<string, double> arithTypes = new Dictionary<string, double>();
 
         string output;
         bool consoleIsOpen = false;
@@ -136,6 +138,48 @@ namespace PLProject_Pastor
                             ConsoleOutput.WriteConsole(sum + "");
                         }
                 }
+
+                //--------------------------------------------------ADD
+                else if (tokens[0].Contains(ariths[0]))
+                {
+                    string []toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) + double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+
+                }
+                //--------------------------------------------------SUBTRACT
+                else if (tokens[0].Contains(ariths[1]))
+                {
+                    string[] toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) - double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+              
+                }
+                //--------------------------------------------------MULTIPLY
+                else if (tokens[0].Contains(ariths[2]))
+                {
+                    string[] toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) * double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+
+                }
+                //-------------------------------------------------- DIVIDE
+                else if (tokens[0].Contains(ariths[3]))
+                {
+                    string[] toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) / double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+
+                }
+                //--------------------------------------------------Remainder
+                else if (tokens[0].Contains(ariths[4]))
+                {
+                    string[] toks = tokens[1].Split(' ');
+                    double ans = double.Parse(toks[0]) % double.Parse(toks[1]);
+                    arithTypes.Add(tokens[0], ans);
+
+                }
+
             }
 
             //Display Console
