@@ -38,7 +38,7 @@ namespace PLProject_Pastor
             output = "";
             stringType = new Dictionary<string, string>();
             numberType = new Dictionary<string, double>();
-            string[] splitArray = Regex.Split(code, @"(?:,\s+|{\*\})");
+            string[] splitArray = Regex.Split(code, @"(?:,\s+|\^{\*\})");
             List<string> statements = new List<string>();
 
 
@@ -47,7 +47,6 @@ namespace PLProject_Pastor
                 statements.AddRange(splitArray[i].Split('\n', '\t'));
             }
 
-            if (statements.Count!=0)
             for (int i = 0; i < statements.Count; i++)
             {
                 //token[0]: token[1]
@@ -188,7 +187,7 @@ namespace PLProject_Pastor
             if (consoleIsOpen == true)
             {
 
-                ConsoleOutput.WriteConsole("\n\n--------------------------------------------------------------------------------\nPress any key to continue. . .");
+                ConsoleOutput.WriteConsole("\n\n---------------------------------------------------------------\nPress any key to continue. . .");
                 ConsoleOutput.ReadLineConsole();
                 ConsoleOutput.CloseConsole();
                 consoleIsOpen = false;
@@ -280,7 +279,7 @@ namespace PLProject_Pastor
 
         public double Ternary(string code, double dataType)
         {
-            //#var1 : {if:1>2 , 1;2}
+            //{if:1>2 , 1;2}
             string condition, c1, c2;
             code = code.Replace("}", "");
             code = code.Replace("{", "");
@@ -302,12 +301,65 @@ namespace PLProject_Pastor
         }
 
         bool Condition(string parse) {
-            if (parse.Contains("<"))
-                return double.Parse(parse.Split('<')[0]) < double.Parse(parse.Split('<')[1]);
-            if (parse.Contains(">"))
-                return double.Parse(parse.Split('>')[0]) > double.Parse(parse.Split('>')[1]);
-            if (parse.Contains("="))
-                return double.Parse(parse.Split('=')[0]) == double.Parse(parse.Split('=')[1]);
+            if (parse.Contains("<")) { 
+                if(!parse.Split('<')[0].Trim().StartsWith(datatypes[0]) && !parse.Split('<')[1].Trim().StartsWith(datatypes[0]))
+                    return double.Parse(parse.Split('<')[0]) < double.Parse(parse.Split('<')[1]);
+                else if (parse.Split('<')[0].Trim().StartsWith(datatypes[0]) && !parse.Split('<')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('<')[0].Trim()))
+                        return numberType[parse.Split('<')[0].Trim()] < double.Parse(parse.Split('<')[1]);
+                }
+                else if (!parse.Split('<')[0].Trim().StartsWith(datatypes[0]) && parse.Split('<')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('<')[1].Trim()))
+                        return double.Parse(parse.Split('<')[0]) < numberType[parse.Split('<')[1].Trim()];
+                }
+                else if (parse.Split('<')[0].Trim().StartsWith(datatypes[0]) && parse.Split('<')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('<')[0].Trim())&& numberType.ContainsKey(parse.Split('<')[1].Trim()))
+                        return numberType[parse.Split('<')[0].Trim()] < numberType[parse.Split('<')[1].Trim()];
+                }
+            }
+            else if (parse.Contains(">"))
+            {
+                if (!parse.Split('>')[0].Trim().StartsWith(datatypes[0]) && !parse.Split('>')[1].Trim().StartsWith(datatypes[0]))
+                    return double.Parse(parse.Split('>')[0]) > double.Parse(parse.Split('>')[1]);
+                else if (parse.Split('>')[0].Trim().StartsWith(datatypes[0]) && !parse.Split('>')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('>')[0].Trim()))
+                        return numberType[parse.Split('>')[0].Trim()] > double.Parse(parse.Split('>')[1]);
+                }
+                else if (!parse.Split('>')[0].Trim().StartsWith(datatypes[0]) && parse.Split('>')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('>')[1].Trim()))
+                        return double.Parse(parse.Split('>')[0]) > numberType[parse.Split('>')[1].Trim()];
+                }
+                else if (parse.Split('>')[0].Trim().StartsWith(datatypes[0]) && parse.Split('>')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('>')[0].Trim()) && numberType.ContainsKey(parse.Split('>')[1].Trim()))
+                        return numberType[parse.Split('>')[0].Trim()] > numberType[parse.Split('>')[1].Trim()];
+                }
+            }
+            else if (parse.Contains("="))
+            {
+                if (!parse.Split('=')[0].Trim().StartsWith(datatypes[0]) && !parse.Split('=')[1].Trim().StartsWith(datatypes[0]))
+                    return double.Parse(parse.Split('=')[0]) == double.Parse(parse.Split('=')[1]);
+                else if (parse.Split('=')[0].Trim().StartsWith(datatypes[0]) && !parse.Split('=')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('=')[0].Trim()))
+                        return numberType[parse.Split('=')[0].Trim()] == double.Parse(parse.Split('=')[1]);
+                }
+                else if (!parse.Split('=')[0].Trim().StartsWith(datatypes[0]) && parse.Split('=')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('=')[1].Trim()))
+                        return double.Parse(parse.Split('=')[0]) == numberType[parse.Split('=')[1].Trim()];
+                }
+                else if (parse.Split('=')[0].Trim().StartsWith(datatypes[0]) && parse.Split('=')[1].Trim().StartsWith(datatypes[0]))
+                {
+                    if (numberType.ContainsKey(parse.Split('=')[0].Trim()) && numberType.ContainsKey(parse.Split('=')[1].Trim()))
+                        return numberType[parse.Split('=')[0].Trim()] == numberType[parse.Split('=')[1].Trim()];
+                }
+            }
 
             return false;
         }
