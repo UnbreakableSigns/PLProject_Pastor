@@ -12,7 +12,7 @@ namespace PLProject_Pastor
 {
     class Interpreter
     {
-        string[] keywords = { "darllenwch", "ysgrifennu", "hyd", "svm", "os"};// read,write,length,sum,if
+        string[] keywords = { "darllenwch", "ysgrifennu", "hyd", "svm", "os", "am", "yn"};// read,write,length,sum,if
         string[] datatypes = { "#", "@", "$", "~" };
         string[] ariths = { "+", "-", "*", "/", "%" };
         public Interpreter() { }
@@ -65,7 +65,24 @@ namespace PLProject_Pastor
                     tokens[0] = tokens[0].Trim();
                     tokens[1] = tokens[1].Trim();
 
+                    if (tokens[0].Contains(keywords[5]))//for
+                    {
+                        MessageBox.Show("pasok");
+                        string[] splitter = Regex.Split(tokens[1], @"\(\{\*\}\)");
+                        for(int x=0; x<splitter.Length;x++)
+                        {
+                            MessageBox.Show(splitter[x]);
+                        } 
+                        string var = tokens[1].Split(':')[0].TrimStart('{').Split(' ')[0];
+                        
+                        string min = tokens[1].Split(':')[0].TrimStart('{').Split(' ')[3].TrimStart('[').TrimEnd(']').Split(' ')[0];
+                        string max = tokens[1].Split(':')[0].TrimStart('{').Split(' ')[3].TrimStart('[').TrimEnd(']').Split(' ')[1];
+                        string code1 = tokens[1].Split(':')[1].Replace("{", "");
+                        code1 = tokens[1].Split(':')[1].Replace("}", "");
 
+                        MessageBox.Show(var + " " + min + " " + max + " " + code1);
+                        For(code1, int.Parse(min), int.Parse(max));
+                    }
                     //----------------------------------------------------NUMBER
                     if (tokens[0].Trim().StartsWith(datatypes[0]))
                     {
@@ -266,7 +283,8 @@ namespace PLProject_Pastor
                 }
             }
             catch (Exception ex) {
-                MessageBox.Show("ERROR. Unable to execute.");
+                //MessageBox.Show("ERROR. Unable to execute.");
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -350,6 +368,14 @@ namespace PLProject_Pastor
                     return c1;
                 else
                     return c2;
+
+        }
+
+        public void For(string code, int min, int max) {
+            for (int i = min; i <= max; i++) {
+                read(code);
+            }
+
 
         }
 

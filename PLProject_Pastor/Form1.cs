@@ -30,7 +30,7 @@ namespace PLProject_Pastor
             //catch (Exception ex) {
                 //MessageBox.Show("There seems to be an error in your code.");
             ///}
-            /*string[] splitArray = Regex.Split(richTextBox1.Text, @"(?:,\s+)");
+            string[] splitArray = Regex.Split(richTextBox1.Text, @"(?:,\s+)");
             List<string> statements = new List<string>();
 
             for (int i = 0; i < splitArray.Length; i++)
@@ -40,7 +40,7 @@ namespace PLProject_Pastor
             statements.Remove("");
 
             richTextBox1.Text = "";
-            for (int i = 0; i < statements.Count; i++)
+            /*for (int i = 0; i < statements.Count; i++)
             {
                 //token: token
                 List<string> tokens = new List<string>();
@@ -52,8 +52,8 @@ namespace PLProject_Pastor
 
                     ss += "[" + s + "]\n";
                 }
-
-                richTextBox1.Text += ss;
+                
+                richTextBox1.Text += statements[i];
                 richTextBox1.Text += "\n";
             }*/
         }
@@ -62,7 +62,7 @@ namespace PLProject_Pastor
         //set color of certain keywords and tokens in languages
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            string keywords = @"\b(darllenwch|ysgrifennu|svm|hyd|wir|ffug|os)\b";//(write|read|sum|len|true|false|if)
+            string keywords = @"\b(darllenwch|ysgrifennu|svm|hyd|wir|ffug|os|am|yn)\b";//(write|read|sum|len|true|false|if)
             string variabs = @"(\$.+?\s|#.+?\s|@.+?\s|~.+?\s)";     
             string comments = @"(\--\--.+?$|\--*.+?\--)";
             string str = @"(''|'.+?')";
