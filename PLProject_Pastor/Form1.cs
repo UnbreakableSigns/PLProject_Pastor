@@ -88,12 +88,6 @@ namespace PLProject_Pastor
                 richTextBox1.SelectionColor = Color.Orange;
             }
 
-            foreach (Match m in commsmatch)
-            {
-                richTextBox1.SelectionStart = m.Index;
-                richTextBox1.SelectionLength = m.Length;
-                richTextBox1.SelectionColor = Color.IndianRed;
-            }
             foreach (Match m in strmatch)
             {
 
@@ -108,6 +102,12 @@ namespace PLProject_Pastor
                 richTextBox1.SelectionLength = m.Length;
                 richTextBox1.SelectionColor = Color.LightSeaGreen;
             }
+            foreach (Match m in commsmatch)
+            {
+                richTextBox1.SelectionStart = m.Index;
+                richTextBox1.SelectionLength = m.Length;
+                richTextBox1.SelectionColor = Color.IndianRed;
+            }
 
             richTextBox1.SelectionStart = originalIndex;
             richTextBox1.SelectionLength = originalLength;
@@ -120,7 +120,7 @@ namespace PLProject_Pastor
         private void openProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            dialog.Filter = "psl files (*.psl)|*.psl|All files (*.*)|*.*";
             dialog.InitialDirectory = Directory.GetParent(Directory.GetParent((Directory.GetCurrentDirectory())).FullName).FullName + "\\sample";
             
             dialog.Title = "Select a text file";
@@ -155,7 +155,7 @@ namespace PLProject_Pastor
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            dialog.Filter = "psl files (*.psl)|*.psl|All files (*.*)|*.*";
             dialog.InitialDirectory = Directory.GetParent(Directory.GetParent((Directory.GetCurrentDirectory())).FullName).FullName + "\\sample";
 
             dialog.Title = "Save as";

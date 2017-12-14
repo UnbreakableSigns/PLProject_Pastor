@@ -29,8 +29,7 @@ namespace PLProject_Pastor
 
         public void read(string code)
         {
-            try
-            {
+            try{
                 consoleIsOpen = false;
                 stringType.Clear();
                 numberType.Clear();
@@ -48,7 +47,8 @@ namespace PLProject_Pastor
 
                 stringType = new Dictionary<string, string>();
                 numberType = new Dictionary<string, double>();
-                string[] splitArray = Regex.Split(code, @"(?:,\s+|\^{\*\})");
+                string[] splitArray = Regex.Split(code, @"(?:,\s+)");
+                //splitArray = Regex.Split(code, @"(?:,\s+)^({\*\})");
                 List<string> statements = new List<string>();
 
 
@@ -91,14 +91,27 @@ namespace PLProject_Pastor
                             }
                         }
                         else if (tokens[1].Contains(keywords[4]))
-                        {//////////////////////////////
-                            MessageBox.Show("ch : " + tokens[1]);
+                        { 
                             numberType.Add(tokens[0], Ternary(tokens[1], 0));
                         }
+                        //--------------------------------------------------ADD
                         else if (tokens[1].Contains(ariths[0]))
                         {
                             string[] toks = tokens[1].Split(' ');
-                            double ans = double.Parse(toks[1]) + double.Parse(toks[2]);
+                            double val1, val2;
+                            if (toks[1].Trim().StartsWith("#"))
+                                val1 = numberType[toks[1].Trim()];
+                            else
+                                val1 = double.Parse(toks[1]);
+
+                            if (toks[2].Trim().StartsWith("#"))
+                                val2 = numberType[toks[2].Trim()];
+                            else
+                                val2 = double.Parse(toks[2]);
+
+
+                            double ans = val1 + val2;
+                            
                             numberType.Add(tokens[0], ans);
 
                         }
@@ -106,32 +119,79 @@ namespace PLProject_Pastor
                         else if (tokens[1].Contains(ariths[1]))
                         {
                             string[] toks = tokens[1].Split(' ');
-                            double ans = double.Parse(toks[1]) - double.Parse(toks[2]);
-                            numberType.Add(tokens[0], ans);
+                            double val1, val2;
+                            if (toks[1].Trim().StartsWith("#"))
+                                val1 = numberType[toks[1].Trim()];
+                            else
+                                val1 = double.Parse(toks[1]);
 
+                            if (toks[2].Trim().StartsWith("#"))
+                                val2 = numberType[toks[2].Trim()];
+                            else
+                                val2 = double.Parse(toks[2]);
+
+
+                            double ans = val1 - val2;
+
+                            numberType.Add(tokens[0], ans);
                         }
                         //--------------------------------------------------MULTIPLY
                         else if (tokens[1].Contains(ariths[2]))
                         {
                             string[] toks = tokens[1].Split(' ');
-                            double ans = double.Parse(toks[1]) * double.Parse(toks[2]);
-                            numberType.Add(tokens[0], ans);
+                            double val1, val2;
+                            if (toks[1].Trim().StartsWith("#"))
+                                val1 = numberType[toks[1].Trim()];
+                            else
+                                   val1 = double.Parse(toks[1]);
 
+                            if (toks[2].Trim().StartsWith("#"))
+                                val2 = numberType[toks[2].Trim()];
+                            else
+                                val2 = double.Parse(toks[2]);
+
+
+                            double ans = val1 * val2;
+
+                            numberType.Add(tokens[0], ans);
                         }
                         //-------------------------------------------------- DIVIDE
                         else if (tokens[1].Contains(ariths[3]))
                         {
-                            string[] toks = tokens[1].Split(' ');
-                            double ans = double.Parse(toks[1]) / double.Parse(toks[2]);
-                            numberType.Add(tokens[0], ans);
+                                string[] toks = tokens[1].Split(' ');
+                                double val1, val2;
+                                if (toks[1].Trim().StartsWith("#"))
+                                    val1 = numberType[toks[1].Trim()];
+                                else
+                                    val1 = double.Parse(toks[1]);
 
-                        }
+                                if (toks[2].Trim().StartsWith("#"))
+                                    val2 = numberType[toks[2].Trim()];
+                                else
+                                    val2 = double.Parse(toks[2]);
+
+
+                                double ans = val1 / val2;
+
+                                numberType.Add(tokens[0], ans);
+                            }
                         //--------------------------------------------------Remainder
                         else if (tokens[1].Contains(ariths[4]))
                         {
                             string[] toks = tokens[1].Split(' ');
-                            double ans = double.Parse(toks[1]) % double.Parse(toks[2]);
-                            numberType.Add(tokens[0], ans);
+                            double val1, val2;
+                            if (tokens[1].Trim().StartsWith("#"))
+                                val1 = numberType[toks[1].Trim()];
+                            else
+                                val1 = double.Parse(toks[1]);
+
+                            if (tokens[2].Trim().StartsWith("#"))
+                                val2 = numberType[toks[2].Trim()];
+                            else
+                                val2 = double.Parse(toks[2]);
+
+                            double ans = val1 % val2;
+                            numberType.Add(tokens[1], ans);
 
                         }
                         else
@@ -142,7 +202,9 @@ namespace PLProject_Pastor
                     {
                         List<double> listOfDouble = new List<double>();
 
-                        tokens[1] = tokens[1].Substring(1, tokens[1].Length - 2);
+                        
+                        tokens[1] = tokens[1].Replace("[", "");
+                        tokens[1] = tokens[1].Replace("]", "");
                         string[] nums = tokens[1].Split(new char[0]);
 
                         foreach (string n in nums)
@@ -204,7 +266,7 @@ namespace PLProject_Pastor
                 }
             }
             catch (Exception ex) {
-                
+                MessageBox.Show("ERROR. Unable to execute.");
             }
         }
 
@@ -238,12 +300,12 @@ namespace PLProject_Pastor
                 
                 if (stringType[tokens[1]].Trim().ToString().StartsWith("\'"))
                 {
-                    output = stringType[tokens[1]].Trim().ToString().Substring(1, stringType[tokens[1]].Trim().ToString().Length - 2) + "\n";
+                    output = stringType[tokens[1]].Substring(1, stringType[tokens[1]].Trim().ToString().Length - 2) + "\n";
                     ConsoleOutput.WriteConsole(output);
                 }
                 else
                 {
-                    output = stringType[tokens[1]] + "\n";
+                    output = stringType[tokens[1]].ToString().Replace("\'", "").Trim() + "\n";
                     ConsoleOutput.WriteConsole(output);
                 }
             }
@@ -303,7 +365,6 @@ namespace PLProject_Pastor
             {
                 condition = tern2[0].Split(':')[1].Trim();
                 c1 = tern2[1].Trim().Split(';')[0];
-                MessageBox.Show(c1);
                 c2 = tern2[1].Trim().Split(';')[1];
             }
             else throw new Exception();

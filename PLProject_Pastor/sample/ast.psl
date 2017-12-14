@@ -1,0 +1,10 @@
+{
+	#var1 : 1,
+	@var1 : [1 2 3],
+	$var1 : 'john',
+	~var1 : ffug,
+	#var2 : { hyd : var1 },
+	ysgrifennu : #var2,
+	#var12 : + 3 3,
+	ysgrifennu : #var12
+}
