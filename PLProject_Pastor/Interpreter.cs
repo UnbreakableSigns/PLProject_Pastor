@@ -65,24 +65,6 @@ namespace PLProject_Pastor
                     tokens[0] = tokens[0].Trim();
                     tokens[1] = tokens[1].Trim();
 
-                    if (tokens[0].Contains(keywords[5]))//for
-                    {
-                        MessageBox.Show("pasok");
-                        string[] splitter = Regex.Split(tokens[1], @"\(\{\*\}\)");
-                        for(int x=0; x<splitter.Length;x++)
-                        {
-                            MessageBox.Show(splitter[x]);
-                        } 
-                        string var = tokens[1].Split(':')[0].TrimStart('{').Split(' ')[0];
-                        
-                        string min = tokens[1].Split(':')[0].TrimStart('{').Split(' ')[3].TrimStart('[').TrimEnd(']').Split(' ')[0];
-                        string max = tokens[1].Split(':')[0].TrimStart('{').Split(' ')[3].TrimStart('[').TrimEnd(']').Split(' ')[1];
-                        string code1 = tokens[1].Split(':')[1].Replace("{", "");
-                        code1 = tokens[1].Split(':')[1].Replace("}", "");
-
-                        MessageBox.Show(var + " " + min + " " + max + " " + code1);
-                        For(code1, int.Parse(min), int.Parse(max));
-                    }
                     //----------------------------------------------------NUMBER
                     if (tokens[0].Trim().StartsWith(datatypes[0]))
                     {
@@ -238,7 +220,13 @@ namespace PLProject_Pastor
                     //----------------------------------------------------BOOL
                     else if (tokens[0].Trim().StartsWith(datatypes[3]))
                     {
-                        boolType.Add(tokens[0], getWelshBoolean(tokens[1]));
+                        
+                        if(tokens[1].Contains(keywords[4]))
+                        {
+                            boolType.Add(tokens[0], Ternary(tokens[1], true));
+                        }
+                        else
+                            boolType.Add(tokens[0], getWelshBoolean(tokens[1]));
                     }
                     //----------------------------------------------------READ
                     else if (tokens[0].Contains(keywords[0]))
@@ -348,7 +336,7 @@ namespace PLProject_Pastor
             }
         }   
 
-        public String Ternary(string code, string dataType)
+        public bool Ternary(string code, bool dataType)
         {
             //{if:1>2 | 1;2}
             string condition, c1, c2;
@@ -359,16 +347,15 @@ namespace PLProject_Pastor
             if ((tern2[0].Split(':')[0]).Contains(keywords[4]))
             {
                 condition = tern2[0].Split(':')[1];
+                MessageBox.Show(condition);
                 c1 = tern2[1].Split(';')[0];
+                MessageBox.Show(c1);
                 c2 = tern2[1].Split(';')[1];
+                MessageBox.Show(c2);
             }
             else throw new Exception();
 
-                if (Condition(condition))
-                    return c1;
-                else
-                    return c2;
-
+            return (Condition(condition));
         }
 
         public void For(string code, int min, int max) {
