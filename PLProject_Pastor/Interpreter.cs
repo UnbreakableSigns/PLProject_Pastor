@@ -48,7 +48,7 @@ namespace PLProject_Pastor
                 stringType = new Dictionary<string, string>();
                 numberType = new Dictionary<string, double>();
                 string[] splitArray = Regex.Split(code, @"(?:,\s+)");
-                splitArray = Regex.Split(code, @"(?:,\s+)^(\(\*\\\))");
+                //splitArray = Regex.Split(code, @"(?:,\s+)^(\(\*\\\))");
                 List<string> statements = new List<string>();
 
 
@@ -332,12 +332,12 @@ namespace PLProject_Pastor
 
         public String Ternary(string code, string dataType)
         {
-            //{if:1>2 , 1;2}
+            //{if:1>2 | 1;2}
             string condition, c1, c2;
-            code= code.Replace("(", "");
-            code= code.Replace(")", "");
+            code= code.Replace("{", "");
+            code= code.Replace("}", "");
 
-            string[] tern2 = code.Split(new char[] { ':' }, 2);
+            string[] tern2 = code.Split(new char[] { '|' }, 2);
             if ((tern2[0].Split(':')[0]).Contains(keywords[4]))
             {
                 condition = tern2[0].Split(':')[1];
@@ -357,10 +357,10 @@ namespace PLProject_Pastor
         {
             //{if:1>2 , 1;2}
             string condition, c1, c2;
-            code = code.Replace("(", "");
-            code = code.Replace(")", "");
+            code = code.Replace("{", "");
+            code = code.Replace("}", "");
 
-            string[] tern2 = code.Split(new char[] { ',' }, 2);
+            string[] tern2 = code.Split(new char[] { '|' }, 2);
             if ((tern2[0].Split(':')[0]).Contains(keywords[4]))
             {
                 condition = tern2[0].Split(':')[1].Trim();

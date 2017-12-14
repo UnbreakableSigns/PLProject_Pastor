@@ -11,7 +11,9 @@ namespace PLProject_Pastor
 {
     public partial class Splashscreen : Form
     {
-        bool flag;
+        Timer t1 = new Timer();
+
+
         public Splashscreen()
         {
             InitializeComponent();
@@ -19,7 +21,16 @@ namespace PLProject_Pastor
 
         private void Splashscreen_Load(object sender, EventArgs e)
         {
-            flag = true;
+            t1.Tick += t1_Tick;
+            t1.Interval = 5000; //5000 ms = 5 seconds
+            t1.Start();
+        }
+
+        void t1_Tick(object sender, EventArgs e)
+        {
+            this.Hide();
+            t1.Stop(); //it should be stopped after hiding the form
+            new Form1().Show();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -27,52 +38,6 @@ namespace PLProject_Pastor
 
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (progressBar1.Value < 99)
-            {
-                if (flag)
-                {
-                    flag = false;
-                    label1.Text = "Loading.";
-                }
-                else
-                {
-                    flag = true;
-                    label1.Text = "Loading..";
-                }
-                progressBar1.Value += 10;
-                if (progressBar1.Value > 50)
-                {
-                    timer2.Enabled = true;
-                    timer2.Start();
-                }
-            }
-            else
-            {
-                timer1.Stop();
-                timer1.Enabled = false;
-                //  timer2.Enabled = true;
-                //  timer2.Start();                
-            }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            this.Opacity -= 0.03;
-
-            // MessageBox.Show(this.Opacity+"");
-            if (this.Opacity <= 0)
-            {
-                timer2.Enabled = false;
-                this.Visible = false;
-                new Form1().Show();
-            }
-        }
+        
     }
 }
